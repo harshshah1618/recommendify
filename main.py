@@ -72,7 +72,7 @@ def home():
     return render_template('home1.html')
 
 
-@app.route("/recommend")
+@app.route("/recommend1")
 def recommend():
     movie = request.args.get('movie') # get movie name from the URL
     r = rcmd(movie)
