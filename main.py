@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 from flask import Flask, render_template, request
+from requests.models import Response
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 import json
@@ -14,6 +15,7 @@ tmdb = TMDb()
 tmdb.api_key = 'e557f69f25e07a5f19c70512ef711863'
 from tmdbv3api import Movie
 
+# load the nlp model and tfidf vectorizer from disk
 filename = 'nlp_model.pkl'
 clf = pickle.load(open(filename, 'rb'))
 vectorizer = pickle.load(open('tranform.pkl','rb'))
@@ -57,9 +59,13 @@ def ListOfGenres(genre_json):
         return genre_str.join(genres)
 
 
+        
 
-
-
+def MinsToHours(duration):
+    if duration%60==0:
+        return "{:.0f} hours".format(duration/60)
+    else:
+        return "{:.0f} hours {} minutes".format(duration/60,duration%60)
 
 
 
@@ -68,12 +74,21 @@ app = Flask(__name__)
 
 @app.route("/")
 def home():
-    
-    return render_template('home1.html')
+    z=requests.get('https://api.themoviedb.org/3/trending/movie/day?api_key={}'.format(tmdb.api_key))
+    y=z.json()
+    top=[0,1,2,3,4,5,6,7,8,9]
+    trti=[]
+    trpos=[]
+    for i in top:
+        trti.append(y['results'][i]['title'])
+        trpos.append('https://image.tmdb.org/t/p/original/{}'.format(y['results'][i]['poster_path']))
+    tr={trpos[i]: trti[i] for i in range(len(trpos))}
+    return render_template('home.html',tr=tr)
 
 
-@app.route("/recommend1")
+@app.route("/recommend")
 def recommend():
+    
     movie = request.args.get('movie') # get movie name from the URL
     r = rcmd(movie)
     movie = movie.upper()
@@ -86,6 +101,7 @@ def recommend():
         # get movie id and movie title
         movie_id = result[0].id
         movie_name = result[0].title
+        b=movie_id
         
         # making API call
         response = requests.get('https://api.themoviedb.org/3/movie/{}?api_key={}'.format(movie_id,tmdb.api_key))
@@ -115,6 +131,20 @@ def recommend():
 
         # combining reviews and comments into dictionary
         movie_reviews = {reviews_list[i]: reviews_status[i] for i in range(len(reviews_list))} 
+
+        # getting votes with comma as thousands separators
+        vote_count = "{:,}".format(result[0].vote_count)
+        
+        # convert date to readable format (eg. 10-06-2019 to June 10 2019)
+        rd = data_json['release_date']
+
+        # getting the status of the movie (released or not)
+        status = data_json['status']
+
+        # convert minutes to hours minutes (eg. 148 minutes to 2 hours 28 mins)
+        runtime = MinsToHours(data_json['runtime'])
+
+        # getting the posters for the recommended movies
         poster = []
         movie_title_list = []
         for movie_title in r:
@@ -125,24 +155,35 @@ def recommend():
             poster.append('https://image.tmdb.org/t/p/original{}'.format(data_json['poster_path']))
         movie_cards = {poster[i]: r[i] for i in range(len(r))}
 
-        cast_ids= [];
-        cast_names = [];
-        cast_chars = [];
-        cast_profiles = [];
-        top_10 = [0,1,2,3,4,5,6,7,8,9];
+       
+        data=requests.get('https://api.themoviedb.org/3/movie/{}/credits?api_key={}'.format(b,tmdb.api_key))
+        d=data.json()
+        top_cast=[0,1,2,3,4,5,6,7,8,9]
+        cast_names=[]
+        cast_profiles=[]
+        cast_chars=[]
+        cast_ids=[]
+        for i in top_cast:
+            cast_names.append(d['cast'][i]['name'])
+            cast_chars.append(d['cast'][i]['character'])
+            cast_profiles.append("https://image.tmdb.org/t/p/original{}".format(d['cast'][i]['profile_path']))
+            cast_ids.append(d['cast'][i]['cast_id'])
+        casts = {cast_names[i]:[cast_ids[i],cast_chars[i], cast_profiles[i]] for i in range(len(cast_profiles))}
 
+       
+            
         
-        response2 = requests.get('https://api.themoviedb.org/3/movie/{}?api_key={}'.format(movie_id,tmdb.api_key))
-        data_json2 = response2.json()
-        for var_cast in top_10:
-            cast_ids.append({}.format(data_json2['id']))
-            cast_names.append({}.format(data_json2['name']))
-            cast_chars.append({}.format(data_json2['character']))
-            cast_profiles.append('https://image.tmdb.org/t/p/original{}'.format(data_json2['profile_path']))
         
-        casts = {cast_names[i]:[cast_ids[i], cast_chars[i], cast_profiles[i]] for i in range(len(cast_profiles))}
-        return render_template('recommend1.html',movie=movie,mtitle=r,t='l',cards=movie_cards,
-            result=result[0],reviews=movie_reviews,img_path=img_path,genres=genre,casts=casts
-          )
+        
+            
+            
+            
+        
+        return render_template('recommend.html',movie=movie,mtitle=r,t='l',cards=movie_cards,
+            result=result[0],reviews=movie_reviews,img_path=img_path,genres=genre,vote_count=vote_count,
+            release_date=rd,status=status,runtime=runtime,casts=casts)
+
+if __name__ == '__main__':
+    app.run(debug=True)
 
 
