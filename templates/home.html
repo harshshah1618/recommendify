@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+<head>
+	 <title>Home</title>
+	<meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+  <link href="https://fonts.googleapis.com/css?family=IBM+Plex+Sans&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tarekraafat/autocomplete.js@7.2.0/dist/css/autoComplete.min.css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  
+<script src="https://use.fontawesome.com/7540bffd82.js"></script>
+
+<style>
+.movie {
+      color: #fff;
+    	margin-left: auto;
+    	margin-right: auto;
+      resize: none;
+    }
+
+
+
+#content {
+    	background-image: url("../static/image.png");
+    	background-color: #181818
+    }
+
+  
+
+.card {
+      cursor: pointer;
+    }
+
+h1 {
+	    font-family: 'Netflix Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+	    color: #09cbe5;
+	    font-weight: bold;
+	    margin-top: 30px;
+	 }
+    
+.buscar-caja {
+ position: absolute;
+ top: 20%;
+ left: 50%;
+ transform: translate(-50%, -50%);
+ background:  #2f3640;
+ height: 50px;
+ border-radius: 30px;
+ padding: 10px;
+}
+
+.buscar-caja:hover > .buscar-txt {
+ width: 240px;
+ padding: 0 6px;
+}
+
+.buscar-caja:hover > .buscar-btn {
+ background: #ecedf0;
+ color: rgb(2, 2, 2);
+}
+
+.buscar-btn {
+ 
+ float: right;
+ width: 30px;
+ height: 30px;
+ border-radius: 50%;
+ background: #eeeceb;
+ display: flex;
+ justify-content: center;
+ align-items: center;
+ transition: 0.4s;
+ color: #2f3640;
+ cursor: pointer;
+}
+
+.buscar-btn > i {
+ font-size: 20px;
+}
+
+.buscar-txt {
+ border: none;
+ background: none;
+ outline: none;
+ float: left;
+ padding: 0;
+ color: rgb(243, 236, 236);
+ font-size: 16px;
+ transition: 0.4s;
+ line-height: 30px;
+ width: 0px;
+ font-weight: bold;
+}
+
+
+
+.movie-content {
+	display: flex;
+	
+	flex-wrap: wrap;
+	justify-content:center;
+  }
+.movie-content > div {
+  margin:20px;
+}
+#name{
+  color: white;
+}
+
+
+
+
+
+  h6 {
+    margin-bottom: 20px;
+    font-size: large;
+  }
+ 
+  
+
+</style>
+
+  
+
+
+  <script type="text/javascript" src="{{url_for('static', filename='recommend.js')}}"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+</head>
+<body id="content" style="font-family: 'Noto Sans JP', sans-serif;">
+
+
+	<div class="ml-container" style="display: block;">
+    <center><h1> Recommendify</h1></center>
+    <form action="{{ url_for('recommend')}}">
+      <div class="buscar-caja">
+        <input type="text" name="movie" class="buscar-txt"  placeholder="Enter the Movie Name" >
+        <a class="buscar-btn">
+          <i class="fas fa-search"></i>
+         </a>
+        
+      </div>
+  
+     
+    
+   
+		 
+            
+      <br>
+    </form>
+		</div>
+	
+	<br/>
+	<br/>
+	<br/>
+	<br/>
+	<br/>
+
+	<div class="movie" style="color: #E8E8E8;">
+		<center><h3>Trending Movies</h3></center>
+	  </div>
+	
+	  <div class="movie-content">
+		{% for poster, title in tr.items() if not tr.hidden %}
+		<div class="card" style="color:#e0d6e0" title="{{title}}">
+    <img class="card-img-top" height="350" width="200" alt="Card image cap" src={{poster}}>
+   
+		<center><h5 class="card-title"><span style="color: #000000;">{{title}}</span></h5></center>
+		 
+		
+		</div>
+		{% endfor %}
+	
+	
+    </body>
+</html>
+ 
