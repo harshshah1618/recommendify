@@ -82,7 +82,7 @@ def home():
         trti.append(y['results'][i]['title'])
         trpos.append('https://image.tmdb.org/t/p/original/{}'.format(y['results'][i]['poster_path']))
     tr={trpos[i]: trti[i] for i in range(len(trpos))}
-    return render_template('index.html',tr=tr)
+    return render_template('home.html',tr=tr)
 
 
 @app.route("/recommend")
