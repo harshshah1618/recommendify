@@ -12,7 +12,7 @@
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-  
+  <link rel="icon" href="../static/favicon.png" type="image/icon type">
 <script src="https://use.fontawesome.com/7540bffd82.js"></script>
 
 <style>
@@ -26,7 +26,7 @@
 
 
 #content {
-    	background-image: url("../static/image.png");
+    	
     	background-color: #181818
     }
 
@@ -38,17 +38,17 @@
 
 h1 {
 	    font-family: 'Netflix Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-	    color: #09cbe5;
+	    color: #f14040;
 	    font-weight: bold;
 	    margin-top: 30px;
 	 }
     
 .buscar-caja {
  position: absolute;
- top: 20%;
+ top: 40%;
  left: 50%;
  transform: translate(-50%, -50%);
- background:  #2f3640;
+ background:  #5a5757;
  height: 50px;
  border-radius: 30px;
  padding: 10px;
@@ -112,7 +112,12 @@ h1 {
   color: white;
 }
 
-
+.logo{
+  display: block;
+  margin-left: 610px;
+  margin-right: auto;
+  width: 75%;
+}
 
 
 
@@ -137,10 +142,13 @@ h1 {
 
 
 	<div class="ml-container" style="display: block;">
-    <center><h1> Recommendify</h1></center>
+    
+  <div class="logo">
+    <img  src='../static/logo_transparent.png' height="300" width="300" alt="re" >
+    </div>
     <form action="{{ url_for('recommend')}}">
       <div class="buscar-caja">
-        <input type="text" name="movie" class="buscar-txt"  placeholder="Enter the Movie Name" >
+        <input type="text" name="movie" class="buscar-txt"  placeholder="Enter a movie.." >
         <a class="buscar-btn">
           <i class="fas fa-search"></i>
          </a>
@@ -178,6 +186,10 @@ h1 {
 		{% endfor %}
 	
 	
-    </body>
+
+	
+	
+	
+
+</body>
 </html>
- 
