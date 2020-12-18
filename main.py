@@ -9,22 +9,21 @@ import bs4 as bs
 import urllib.request
 import pickle
 import requests
-import os
+
 from tmdbv3api import TMDb
 tmdb = TMDb()
 tmdb.api_key = 'e557f69f25e07a5f19c70512ef711863'
 from tmdbv3api import Movie
 
-basepath = os.path.abspath(".")
-clf = pickle.load(open(basepath+"/nlp_model.pkl", 'rb'))
-vectorizer = pickle.load(open(basepath+"/tranform.pkl",'rb'))
+# load the nlp model and tfidf vectorizer from disk
+filename = 'nlp_model.pkl'
+clf = pickle.load(open(filename, 'rb'))
+vectorizer = pickle.load(open('tranform.pkl','rb'))
 
 def create_sim():
     data = pd.read_csv('main_data.csv')
-    # creating a count matrix
     cv = CountVectorizer()
     count_matrix = cv.fit_transform(data['comb'])
-    # creating a similarity score matrix
     sim = cosine_similarity(count_matrix)
     return data,sim
 
@@ -88,7 +87,7 @@ def home():
 @app.route("/recommend")
 def recommend():
     
-    movie = request.args.get('movie') # get movie name from the URL
+    movie = request.args.get('movie') 
     r = rcmd(movie)
     movie = movie.upper()
     if type(r)==type('string'): # no such movie found in the database
@@ -96,29 +95,22 @@ def recommend():
     else:
         tmdb_movie = Movie()
         result = tmdb_movie.search(movie)
-
-        # get movie id and movie title
         movie_id = result[0].id
         movie_name = result[0].title
         b=movie_id
         
-        # making API call
+        
         response = requests.get('https://api.themoviedb.org/3/movie/{}?api_key={}'.format(movie_id,tmdb.api_key))
         data_json = response.json()
         imdb_id = data_json['imdb_id']
         poster = data_json['poster_path']
         img_path = 'https://image.tmdb.org/t/p/original{}'.format(poster)
-
-        # getting list of genres form json
         genre = ListOfGenres(data_json['genres'])
-
-        # web scraping to get user reviews from IMDB site
         sauce = urllib.request.urlopen('https://www.imdb.com/title/{}/reviews?ref_=tt_ov_rt'.format(imdb_id)).read()
         soup = bs.BeautifulSoup(sauce,'lxml')
         soup_result = soup.find_all("div",{"class":"text show-more__control"})
-
-        reviews_list = [] # list of reviews
-        reviews_status = [] # list of comments (good or bad)
+        reviews_list = [] 
+        reviews_status = []
         for reviews in soup_result:
             if reviews.string:
                 reviews_list.append(reviews.string)
@@ -128,22 +120,10 @@ def recommend():
                 pred = clf.predict(movie_vector)
                 reviews_status.append('Good' if pred else 'Bad')
 
-        # combining reviews and comments into dictionary
-        movie_reviews = {reviews_list[i]: reviews_status[i] for i in range(len(reviews_list))} 
-
-        # getting votes with comma as thousands separators
-        vote_count = "{:,}".format(result[0].vote_count)
         
-        # convert date to readable format (eg. 10-06-2019 to June 10 2019)
+        movie_reviews = {reviews_list[i]: reviews_status[i] for i in range(len(reviews_list))} 
         rd = data_json['release_date']
 
-        # getting the status of the movie (released or not)
-        status = data_json['status']
-
-        # convert minutes to hours minutes (eg. 148 minutes to 2 hours 28 mins)
-        runtime = MinsToHours(data_json['runtime'])
-
-        # getting the posters for the recommended movies
         poster = []
         movie_title_list = []
         for movie_title in r:
@@ -169,20 +149,9 @@ def recommend():
             cast_ids.append(d['cast'][i]['cast_id'])
         casts = {cast_names[i]:[cast_ids[i],cast_chars[i], cast_profiles[i]] for i in range(len(cast_profiles))}
 
-       
-            
-        
-        
-        
-            
-            
-            
-        
         return render_template('recommend.html',movie=movie,mtitle=r,t='l',cards=movie_cards,
-            result=result[0],reviews=movie_reviews,img_path=img_path,genres=genre,vote_count=vote_count,
-            release_date=rd,status=status,runtime=runtime,casts=casts)
+            result=result[0],reviews=movie_reviews,img_path=img_path,genres=genre,
+            release_date=rd,casts=casts)
 
 if __name__ == '__main__':
     app.run(debug=True)
-
-
