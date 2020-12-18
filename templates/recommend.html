@@ -8,7 +8,7 @@
 {% if t=='s' %}
 
   <div class="movie" style="border-color: #181818;width: 60%;color: #A8A8A8;" >
-    <center><h2>Sorry! This movie is not in our database.</h2>
+    <center><h2>Sorry,This movie is not present in our database</h2>
     </center>
   </div>
 
@@ -25,7 +25,7 @@
 <script type="text/javascript" src="{{url_for('static', filename='content.js')}}"></script>
 <script type="text/javascript" src="engine1/jquery.js"></script> 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-
+<link rel="icon" href="../static/favicon.png" type="image/icon type">
  
 </head>
 <style>
@@ -41,20 +41,16 @@
     color: white;
   }
   #content {
-    	background-image: url("../static/image.png");
+    	
     	background-color: #181818
     }
-  .table td {
-    border-color: white;
-    border-style:solid; 
-    border-width:1px;
-  }
+  
 
   #mcontent {
     display: flex;
     flex-wrap: nowrap;
   }
-  
+ 
   h6 {
     margin-bottom: 20px;
     font-size: large;
@@ -84,14 +80,43 @@
 
 /* Darker background on mouse-over */
 .btn:hover {
-  background-color: rgb(25, 26, 27);
+  background-color: rgb(95, 97, 99);
 }
+.styled-table {
+    border-collapse: collapse;
+    margin: 65px 0;
+    font-size: 0.9em;
+    font-family: sans-serif;
+    min-width: 400px;
+    box-shadow: 0 0 20px rgba(109, 105, 105, 0.15);
+}
+.styled-table thead tr {
+    background-color: #d1391e;
+    color: #fdf6f6;
+    text-align: center;
+}
+.styled-table th,
+.styled-table td {
+    padding: 12px 15px;
+}
+.styled-table tbody tr {
+    border-bottom: 1px solid #f14040;
+}
+
+.styled-table tbody tr {
+    background-color: #a8a1a1;
+}
+
+.styled-table tbody tr:last-of-type {
+    border-bottom: 2px solid #f14040;
+}
+
 </style>
 
 
 <body id="content" style="font-family: 'Noto Sans JP', sans-serif;">
   
-  <a href="http://127.0.0.1:5000/" class="btn"><i class="fa fa-home"></i></button></a>
+  <a href="#" class="btn"><i class="fa fa-home"></i></button></a>
 
 <center>
     <h2 id="name" class="text-uppercase">{{result.title}}</h2>
@@ -105,18 +130,20 @@
       <div class="poster-sm text-center">
         <img class="poster" style="border-radius: 40px;margin-bottom: 5%;" height="400" width="250" src = {{ img_path }}>
       </div>
-
       <div style="margin-left: 50px">
-        <br/>
-        <h6 id="title" style="color:white;">Title: &nbsp;{{result.title}}</h6>
-        <h6 id="overview" style="color:white;max-width: 85%">Overview: <br/><br/>&nbsp;&nbsp;&nbsp;{{result.overview}}</h6>
-        <h6 id="genres" style="color:white;">Genre: &nbsp;{{genres}}</h6>
-        <h6 id="date" style="color:white;">Release Date: &nbsp;{{release_date}}</h6>
+      
         
+        <h5 id="title" style="color:#f14040;"">Title: &nbsp;<h5 style=color:white;>{{result.title}}</h5></h5>
+        <h5 style="color:#f14040;" >Overview:&nbsp;<h5 style="color:white;">{{result.overview}}</h5></h5>
+        <h5  style="color:#f14040;">Genre: &nbsp;<h5 style="color:white;">{{genres}}</h5></h5>
+        <h5 id="date" style="color:#f14040;">Release Date: &nbsp;<h5 style="color:white;">{{release_date}}</h5></h5>
+        <br/>
       </div>
     </div>
   </div>
-  <br/>
+  <center>
+    <h2 id="name" style="color:#f14040 " class="text-uppercase">Cast</h2>
+  </center>
   <div class="movie-content">
     {% for name, details in casts.items() if not casts.hidden %}
       <div class="castcard card" style="width: 15rem;" data-toggle="modal" data-target="#{{details[0]}}">
@@ -136,22 +163,22 @@
 
   <center>
     {% if reviews %}
-    <h2 style="color:white">User Reviews</h2>
+    <h2 style="color:#f14040">User Reviews</h2>
      <div class="col-md-12" style="margin: 0 auto; margin-top:25px;">
-            <table class="table table-bordered" bordercolor="white" style="color:white">
+            <table class="styled-table">
                 <thead>
                     <tr>
-                        <th class="text-center" scope="col" style="width: 75%">Comments</th>
-                        <th class="text-center" scope="col">Sentiments</th>
+                        <th  style="width: 75%">Comments</th>
+                        <th>Sentiments</th>
                     </tr>
                 </thead>
         
                 <tbody>
           {% for review, status in reviews.items() if not reviews.hidden %}
-          <tr style="background-color:#00000085;">
+          <tr>
                   <td>{{review}}</td>
                   <td><center>
-                      {{status}} : 
+                      {{status}}
                       
                     </center>
                   </td>
@@ -168,14 +195,14 @@
   </center>
 <br/>
 
-  <div class="movie" style="color: #E8E8E8;">
+  <div class="movie" style="color: #f14040;">
     <center><h3>Recommendations</h3></center>
   </div>
 
   <div class="movie-content">
     {% for poster, title in cards.items() if not cards.hidden %}
   
-    <div class="card" style="color:#f3eff3" title="{{title}}">
+    <div class="card" style="color:#f3eff3"  title="{{title}}" onclick="{{ url_for('recommend')}}">
       
       <img class="card-img-top" height="400" width="240" alt="Card image cap" src={{poster}}>
       <div class="card-body">
@@ -187,5 +214,8 @@
 {% endfor %}
 {% endif %}
   </div>
- </body>
+
+
+  
+  </body>
   </html>
