@@ -2,9 +2,6 @@
 <head>
   <title>Recs</title>
   
-
-
-
 {% if t=='s' %}
 
   <div class="movie" style="border-color: #181818;width: 60%;color: #A8A8A8;" >
@@ -22,7 +19,7 @@
     </ul>
 </div> -->
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP&display=swap" rel="stylesheet">
-<script type="text/javascript" src="{{url_for('static', filename='content.js')}}"></script>
+<script type="text/javascript" src="{{url_for('static', filename='recommend.js')}}"></script>
 <script type="text/javascript" src="engine1/jquery.js"></script> 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <link rel="icon" href="../static/favicon.png" type="image/icon type">
@@ -48,7 +45,9 @@
 
   #mcontent {
     display: flex;
-    flex-wrap: nowrap;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
   }
  
   h6 {
@@ -69,23 +68,11 @@
       display: none;
     }
   }
-  .btn {
-  background-color: rgb(19, 20, 20); /* Blue background */
-  border: none; /* Remove borders */
-  color: white; /* White text */
-  padding: 12px 16px; /* Some padding */
-  font-size: 16px; /* Set a font size */
-  cursor: pointer; /* Mouse pointer on hover */
-}
-
-/* Darker background on mouse-over */
-.btn:hover {
-  background-color: rgb(95, 97, 99);
-}
+ 
 .styled-table {
     border-collapse: collapse;
     margin: 65px 0;
-    font-size: 0.9em;
+    font-size: 0.8em;
     font-family: sans-serif;
     min-width: 400px;
     box-shadow: 0 0 20px rgba(109, 105, 105, 0.15);
@@ -100,7 +87,7 @@
     padding: 12px 15px;
 }
 .styled-table tbody tr {
-    border-bottom: 1px solid #f14040;
+    border-bottom: 3px solid #f14040;
 }
 
 .styled-table tbody tr {
@@ -115,9 +102,6 @@
 
 
 <body id="content" style="font-family: 'Noto Sans JP', sans-serif;">
-  
-  <a href="#" class="btn"><i class="fa fa-home"></i></button></a>
-
 <center>
     <h2 id="name" class="text-uppercase">{{result.title}}</h2>
   </center>
@@ -125,11 +109,9 @@
   <div id="mycontent">
     <div id="mcontent">
       <div class="poster-lg">
-        <img class="poster" style="border-radius: 40px;margin-left: 90px;" height="400" width="250" src = {{ img_path }}>
+        <img class="poster" style height="650" width="470" src = {{ img_path }}>
       </div>
-      <div class="poster-sm text-center">
-        <img class="poster" style="border-radius: 40px;margin-bottom: 5%;" height="400" width="250" src = {{ img_path }}>
-      </div>
+      
       <div style="margin-left: 50px">
       
         
@@ -152,16 +134,13 @@
           
         </div>
         <div class="card-body">
-          <h5 class="card-title"><span style="color: white;">{{name}}</span></h5>
-          <h5 class="card-title"><span style="color:#ee6262;font-size: 10px;">{{details[1]|title}}</span></h5>
+          <h5 class="card-title"><span style="color: white; font-size: large;">{{name}}</span></h5>
+          <h5 class="card-title"><span style="color:#ee6262;font-size:medium;">{{details[1]|title}}</span></h5>
         </div>
       </div>
   {% endfor %}
 </div>
-
-
-
-  <center>
+<center>
     {% if reviews %}
     <h2 style="color:#f14040">User Reviews</h2>
      <div class="col-md-12" style="margin: 0 auto; margin-top:25px;">
@@ -204,7 +183,7 @@
   
     <div class="card" style="color:#f3eff3"  title="{{title}}" onclick="{{ url_for('recommend')}}">
       
-      <img class="card-img-top" height="400" width="240" alt="Card image cap" src={{poster}}>
+      <img class="card-img-top" height="600" width="340" alt="Card image cap" src={{poster}}>
       <div class="card-body">
         <h5 class="card-title">{{title}}</h5>
       </div>
@@ -214,8 +193,6 @@
 {% endfor %}
 {% endif %}
   </div>
+</body>
+</html>
 
-
-  
-  </body>
-  </html>
