@@ -23,7 +23,9 @@
       resize: none;
     }
 
-
+    .movie-content > div {
+    margin:20px;
+  }
 
 #content {
     	
@@ -54,7 +56,6 @@ h1 {
 
 .movie-content {
 	display: flex;
-	
 	flex-wrap: wrap;
 	justify-content:space-around;
   }
@@ -66,10 +67,10 @@ h1 {
 }
 
 .logo{
-  display: block;
+  
   margin-left: auto;
   margin-right: auto;
-  width: 50%;
+  width: 22%;
 }
 
 
@@ -94,14 +95,15 @@ h1 {
 <body id="content" style="font-family: 'Noto Sans JP', sans-serif;">
 
 
-	<div class="ml-container" style="display: block;">
+
     
   <div class="logo">
     <img  src='../static/logo_transparent.png' height="300" width="300" alt="re" >
     </div>
+    <div class="ml-container" style="display: block;">
     <form action="{{ url_for('recommend')}}">
       <div class="form-group shadow-textarea" style="margin-top: 30px;text-align: center;color: white;">
-        <input type="text" name="movie" class="movie form-control"  placeholder="Enter the Movie Name" style="background-color: #ffffff;border-color:#ffffff;width: 60%;color: #181818"/>
+        <input type="text" name="movie" class="movie form-control"  placeholder="Enter a movie.." style="background-color: #ffffff;border-color:#ffffff;width: 30%;color: #181818"/>
          </div>
     </form>
 		</div>
@@ -118,7 +120,7 @@ h1 {
 	  <div class="movie-content">
 		{% for poster, title in tr.items() if not tr.hidden %}
 		<div class="card" style="color:#e0d6e0" title="{{title}}">
-    <img class="card-img-top" height="350" width="200" alt="Card image cap" src={{poster}}>
+    <img class="card-img-top" height="400" width="240" alt="Card image cap" src={{poster}}>
    
 		<center><h5 class="card-title"><span style="color: #000000;">{{title}}</span></h5></center>
 		 
@@ -126,6 +128,6 @@ h1 {
     </div>
 		
 		{% endfor %}
-	
+	</div>
 </body>
 </html>
