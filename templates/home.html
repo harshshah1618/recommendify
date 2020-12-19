@@ -4,15 +4,12 @@
 	 <title>Home</title>
 	<meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+ 
   <link href="https://fonts.googleapis.com/css?family=IBM+Plex+Sans&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tarekraafat/autocomplete.js@7.2.0/dist/css/autoComplete.min.css">
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-  <link rel="icon" href="../static/favicon.png" type="image/icon type">
+ <link rel="icon" href="../static/favicon.png" type="image/icon type">
 <script src="https://use.fontawesome.com/7540bffd82.js"></script>
 
 <style>
@@ -32,7 +29,13 @@
     	background-color: #181818
     }
 
-  
+    .movie-content {
+	display: flex;
+	flex-wrap: wrap;
+  justify-content: space-around;
+  align-items: center;
+	
+  }
 
 .card {
       cursor: pointer;
@@ -54,23 +57,14 @@ h1 {
     	color: #e4e0e0;
     }
 
-.movie-content {
-	display: flex;
-	flex-wrap: wrap;
-	justify-content:space-around;
-  }
-.movie-content > div {
-  margin:20px;
-}
 #name{
   color: white;
 }
 
 .logo{
-  
-  margin-left: auto;
-  margin-right: auto;
-  width: 22%;
+  display: flex;
+  align-items:center;
+  justify-content: center;
 }
 
 
@@ -79,10 +73,7 @@ h1 {
     margin-bottom: 20px;
     font-size: large;
   }
- 
-  
-
-</style>
+ </style>
 
   
 
@@ -93,17 +84,13 @@ h1 {
 
 </head>
 <body id="content" style="font-family: 'Noto Sans JP', sans-serif;">
-
-
-
-    
-  <div class="logo">
+<div class="logo">
     <img  src='../static/logo_transparent.png' height="300" width="300" alt="re" >
     </div>
     <div class="ml-container" style="display: block;">
     <form action="{{ url_for('recommend')}}">
       <div class="form-group shadow-textarea" style="margin-top: 30px;text-align: center;color: white;">
-        <input type="text" name="movie" class="movie form-control"  placeholder="Enter a movie.." style="background-color: #ffffff;border-color:#ffffff;width: 30%;color: #181818"/>
+        <input type="text" name="movie" class="movie form-control"  placeholder="Enter a movie.." style="background-color: #ffffff;border-color:#ffffff;width: 50%;color: #181818"/>
          </div>
     </form>
 		</div>
@@ -117,15 +104,13 @@ h1 {
 	<div class="movie" style="color: #E8E8E8;">
     <center><h3>Trending Movies</h3></center>
   </div>
-	  <div class="movie-content">
+  <div class="movie-content">
 		{% for poster, title in tr.items() if not tr.hidden %}
 		<div class="card" style="color:#e0d6e0" title="{{title}}">
-    <img class="card-img-top" height="400" width="240" alt="Card image cap" src={{poster}}>
+    <img class="card-img-top" height="600" width="300" alt="Card image cap" src={{poster}}>
    
 		<center><h5 class="card-title"><span style="color: #000000;">{{title}}</span></h5></center>
-		 
-    
-    </div>
+		 </div>
 		
 		{% endfor %}
 	</div>
